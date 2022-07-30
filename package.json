@@ -1,7 +1,7 @@
 {
-  "name": "11tut",
+  "name": "12tut",
   "version": "1.0.0",
-  "description": "JWT Auth Express Tutorial",
+  "description": "User Roles Express Tutorial",
   "main": "index.js",
   "scripts": {
     "start": "node server",

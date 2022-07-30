@@ -26,9 +26,15 @@ const handleLogin = async (req, res) => {
   //evaluate password using bcrypt if username was found
   const match = await bcrypt.compare(password, foundUser.password);
   if (match) {
+    const roles = Object.values(foundUser.roles);
     //THIS IS WHERE WE SEND A JWT FOR PROTECTED ROUTES IN OUR API
     const accessToken = jwt.sign(
-      { username: foundUser.username },
+      {
+        UserInfo: {
+          username: foundUser.username,
+          roles: roles,
+        },
+      },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "30s" }
     );
