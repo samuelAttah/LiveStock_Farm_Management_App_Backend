@@ -1,16 +1,7 @@
-const usersDB = {
-  users: require("../model/users.json"),
-  setUsers: function (data) {
-    this.users = data;
-  },
-};
-
+const User = require("../model/User");
 const bcrypt = require("bcrypt");
 
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
-const fsPromises = require("fs").promises;
-const path = require("path");
 
 const handleLogin = async (req, res) => {
   const { username, password } = req.body;
@@ -18,9 +9,8 @@ const handleLogin = async (req, res) => {
     return res
       .status(400)
       .json({ message: "Username and Password are required" });
-  const foundUser = usersDB.users.find(
-    (person) => person.username === username
-  );
+  const foundUser = await User.findOne({ username: username }).exec();
+
   if (!foundUser) return res.status(401).send("Unauthorized User");
 
   //evaluate password using bcrypt if username was found
@@ -36,7 +26,7 @@ const handleLogin = async (req, res) => {
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "30s" }
+      { expiresIn: "2m" }
     );
     const refreshToken = jwt.sign(
       { username: foundUser.username },
@@ -44,21 +34,15 @@ const handleLogin = async (req, res) => {
       { expiresIn: "1d" }
     );
     //Saving refreshToken with current User
-    const otherUsers = usersDB.users.filter(
-      (person) => person.username !== foundUser.username
-    );
-    const currentUser = { ...foundUser, refreshToken };
-    usersDB.setUsers([...otherUsers, currentUser]);
-    await fsPromises.writeFile(
-      path.join(__dirname, "../model", "users.json"),
-      JSON.stringify(usersDB.users)
-    );
+    foundUser.refreshToken = refreshToken;
+    const result = await foundUser.save();
+    console.log("result", result);
+
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
       sameSite: "None",
-      secure: true,
       maxAge: 24 * 60 * 60 * 1000,
-    });
+    }); // remember to add secure true in production
     return res.json({ accessToken: accessToken });
   } else {
     return res.status(401).send("Invalid Password");

@@ -1,12 +1,4 @@
-const usersDB = {
-  users: require("../model/users.json"),
-  setUsers: function (data) {
-    this.users = data;
-  },
-};
-
-const fsPromises = require("fs").promises;
-const path = require("path");
+const User = require("../model/User");
 
 const handleLogout = async (req, res) => {
   //on client, also delete the accessToken
@@ -16,9 +8,7 @@ const handleLogout = async (req, res) => {
   const refreshToken = cookies.jwt;
 
   //Is refresh token in database?
-  const foundUser = usersDB.users.find(
-    (person) => person.refreshToken === refreshToken
-  );
+  const foundUser = await User.findOne({ refreshToken: refreshToken }).exec();
   if (!foundUser) {
     res.clearCookie("jwt", {
       httpOnly: true,
@@ -28,16 +18,10 @@ const handleLogout = async (req, res) => {
     return res.sendStatus(204);
   }
 
-  //Delete the refreshToken in db
-  const otherUsers = usersDB.users.filter(
-    (person) => person.refreshToken !== foundUser.refreshToken
-  );
-  const currentUser = { ...foundUser, refreshToken: "" };
-  usersDB.setUsers([...otherUsers, currentUser]);
-  await fsPromises.writeFile(
-    path.join(__dirname, "../model", "users.json"),
-    JSON.stringify(usersDB.users)
-  );
+  //Delete the refreshToken in db, by setting the refresh token back to an empty string and saving it back to our database
+  foundUser.refreshToken = "";
+  const result = await foundUser.save();
+  console.log("result", result);
   res.clearCookie("jwt", {
     httpOnly: true,
     sameSite: "None",

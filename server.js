@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const path = require("path");
@@ -8,7 +9,12 @@ const errorHandler = require("./middleware/errorHandler");
 const verifyJWT = require("./middleware/verifyJWT");
 const cookieParser = require("cookie-parser");
 const credentials = require("./middleware/credentials");
+const mongoose = require("mongoose");
 const PORT = process.env.PORT || 3500;
+const connectDB = require("./config/dbConn");
+
+//connect to MongoDB
+connectDB();
 
 //CUSTOM MIDDLEWARE LOGGER
 app.use(logger);
@@ -54,4 +60,9 @@ app.all("*", (req, res) => {
 //this handles the CORS errors. It sends the error from the middlewares to the browser as just a single line(custom error)
 app.use(errorHandler);
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+//we want to ensure mongoDB connection before listening to requests on our server so we can:
+
+mongoose.connection.once("open", () => {
+  console.log("connected to MongoDB");
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+});
