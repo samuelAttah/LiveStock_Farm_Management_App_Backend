@@ -117,11 +117,9 @@ const updateRevenue = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Invalid Parameters" });
   }
 
-  batch.revenue = batch.revenue.map((rv) =>
-    rv._id.toString() === revenueId
-      ? { revenueId, itemSold, numberSold, costPerUnit }
-      : rv
-  );
+  batch.revenue.id(revenueId).itemSold = itemSold;
+  batch.revenue.id(revenueId).numberSold = numberSold;
+  batch.revenue.id(revenueId).costPerUnit = costPerUnit;
 
   const result = await batch.save();
 

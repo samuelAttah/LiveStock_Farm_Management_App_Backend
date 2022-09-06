@@ -115,11 +115,9 @@ const updateDrug = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Invalid Parameters" });
   }
 
-  batch.drugs = batch.drugs.map((drug) =>
-    drug._id.toString() === drugId
-      ? { drugId, drugName, purchaseReason, cost }
-      : drug
-  );
+  batch.drugs.id(drugId).drugName = drugName;
+  batch.drugs.id(drugId).purchaseReason = purchaseReason;
+  batch.drugs.id(drugId).cost = cost;
 
   const result = await batch.save();
 

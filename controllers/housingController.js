@@ -114,11 +114,9 @@ const updateHousing = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Invalid Parameters" });
   }
 
-  batch.housing = batch.housing.map((housing) =>
-    housing._id.toString() === housingId
-      ? { housingId, housingType, cost, description }
-      : housing
-  );
+  batch.housing.id(housingId).housingType = housingType;
+  batch.housing.id(housingId).cost = cost;
+  batch.housing.id(housingId).description = description;
 
   const result = await batch.save();
 

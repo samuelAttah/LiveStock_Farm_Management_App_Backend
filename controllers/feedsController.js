@@ -118,11 +118,9 @@ const updateFeed = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Invalid Parameters" });
   }
 
-  batch.feed = batch.feed.map((feed) =>
-    feed._id.toString() === feedId
-      ? { feedId, feedName, datePurchased, amountPurchased }
-      : feed
-  );
+  batch.feed.id(feedId).feedName = feedName;
+  batch.feed.id(feedId).datePurchased = datePurchased;
+  batch.feed.id(feedId).amountPurchased = amountPurchased;
 
   const result = await batch.save();
 

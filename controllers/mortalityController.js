@@ -117,11 +117,8 @@ const updateMortality = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Invalid Parameters" });
   }
 
-  batch.mortality = batch.mortality.map((mt) =>
-    mt._id.toString() === mortalityId
-      ? { mortalityId, numberDead, deathReason }
-      : mt
-  );
+  batch.mortality.id(mortalityId).numberDead = numberDead;
+  batch.mortality.id(mortalityId).deathReason = deathReason;
 
   const result = await batch.save();
 
