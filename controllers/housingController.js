@@ -28,7 +28,7 @@ const getAllHousing = asyncHandler(async (req, res) => {
 const createHousing = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
 
-  const batchId = req?.params;
+  const { batchId } = req?.params;
 
   const { housingType, cost, description } = req?.body;
 
@@ -59,7 +59,7 @@ const createHousing = asyncHandler(async (req, res) => {
 
 const deleteHousing = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
-  const batchId = req?.params;
+  const { batchId } = req?.params;
   const { housingId } = req?.body;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
@@ -79,9 +79,10 @@ const deleteHousing = asyncHandler(async (req, res) => {
     return res.status(204).json({ message: "No Housing found" });
   }
 
-  batch.housing = batch.housing.filter((housing) => housing._id !== feedId);
-
-  const result = await batch.save();
+  const result = await Batch.updateOne(
+    { _id: batchId },
+    { $pull: { housing: { _id: housingId } } }
+  ).exec();
 
   if (!result) {
     return res
@@ -89,14 +90,12 @@ const deleteHousing = asyncHandler(async (req, res) => {
       .json({ message: "Error Occured, Invalid Parameters " });
   }
 
-  return res
-    .status(200)
-    .json({ message: `feed ${housingId} successfully deleted` });
+  return res.status(200).json(result);
 });
 
 const updateHousing = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
-  const batchId = req?.params;
+  const { batchId } = req?.params;
 
   const { housingId, housingType, cost, description } = req?.body;
 

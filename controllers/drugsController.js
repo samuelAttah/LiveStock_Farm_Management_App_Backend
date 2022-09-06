@@ -80,9 +80,10 @@ const deleteDrug = asyncHandler(async (req, res) => {
     return res.status(204).json({ message: "No Drugs found" });
   }
 
-  batch.drugs = batch.drugs.filter((drugs) => drugs._id !== drugId);
-
-  const result = await batch.save();
+  const result = Batch.updateOne(
+    { _id: batchId },
+    { $pull: { drugs: { _id: drugId } } }
+  ).exec();
 
   if (!result) {
     return res
@@ -90,9 +91,7 @@ const deleteDrug = asyncHandler(async (req, res) => {
       .json({ message: "Error Occured, Invalid Parameters " });
   }
 
-  return res
-    .status(200)
-    .json({ message: `drug ${drugId} successfully deleted` });
+  return res.status(200).json(result);
 });
 
 const updateDrug = asyncHandler(async (req, res) => {

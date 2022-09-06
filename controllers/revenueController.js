@@ -28,7 +28,7 @@ const getAllRevenues = asyncHandler(async (req, res) => {
 const createRevenue = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
 
-  const batchId = req?.params;
+  const { batchId } = req?.params;
 
   const { itemSold, numberSold, costPerUnit } = req?.body;
 
@@ -62,7 +62,7 @@ const createRevenue = asyncHandler(async (req, res) => {
 
 const deleteRevenue = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
-  const batchId = req?.params;
+  const { batchId } = req?.params;
   const { revenueId } = req?.body;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
@@ -82,9 +82,10 @@ const deleteRevenue = asyncHandler(async (req, res) => {
     return res.status(204).json({ message: "No Revenues found" });
   }
 
-  batch.revenue = batch.revenue.filter((rv) => rv._id !== revenueId);
-
-  const result = await batch.save();
+  const result = await Batch.updateOne(
+    { _id: batchId },
+    { $pull: { revenue: { _id: revenueId } } }
+  ).exec();
 
   if (!result) {
     return res
@@ -92,14 +93,12 @@ const deleteRevenue = asyncHandler(async (req, res) => {
       .json({ message: "Error Occured, Invalid Parameters " });
   }
 
-  return res
-    .status(200)
-    .json({ message: `Revenue ${revenueId} successfully deleted` });
+  return res.status(200).json(result);
 });
 
 const updateRevenue = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
-  const batchId = req?.params;
+  const { batchId } = req?.params;
 
   const { revenueId, itemSold, numberSold, costPerUnit } = req?.body;
 

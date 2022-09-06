@@ -21,7 +21,7 @@ router.route("/:id").get(batchesController.getBatch);
 router
   .route("/:batchId/drug")
   .get(drugsController.getAllDrugs)
-  .post(drugsController.createDrug)
+  .put(drugsController.createDrug)
   .delete(drugsController.deleteDrug)
   .patch(drugsController.updateDrug);
 
@@ -37,7 +37,7 @@ router
 router
   .route("/:batchId/housing")
   .get(housingController.getAllHousing)
-  .post(housingController.createHousing)
+  .put(housingController.createHousing)
   .delete(housingController.deleteHousing)
   .patch(housingController.updateHousing);
 
@@ -45,7 +45,7 @@ router
 router
   .route("/:batchId/mortality")
   .get(mortalityController.getAllMortality)
-  .post(mortalityController.createMortality)
+  .put(mortalityController.createMortality)
   .delete(mortalityController.deleteMortality)
   .patch(mortalityController.updateMortality);
 
@@ -53,7 +53,7 @@ router
 router
   .route("/:batchId/revenue")
   .get(revenueController.getAllRevenues)
-  .post(revenueController.createRevenue)
+  .put(revenueController.createRevenue)
   .delete(revenueController.deleteRevenue)
   .patch(revenueController.updateRevenue);
 

@@ -28,7 +28,7 @@ const getAllMortality = asyncHandler(async (req, res) => {
 const createMortality = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
 
-  const batchId = req?.params;
+  const { batchId } = req?.params;
 
   const { numberDead, deathReason } = req?.body;
 
@@ -62,7 +62,7 @@ const createMortality = asyncHandler(async (req, res) => {
 
 const deleteMortality = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
-  const batchId = req?.params;
+  const { batchId } = req?.params;
   const { mortalityId } = req?.body;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
@@ -82,9 +82,10 @@ const deleteMortality = asyncHandler(async (req, res) => {
     return res.status(204).json({ message: "No Mortalities found" });
   }
 
-  batch.mortality = batch.mortality.filter((mt) => mt._id !== mortalityId);
-
-  const result = await batch.save();
+  const result = await Batch.updateOne(
+    { _id: batchId },
+    { $pull: { mortality: { _id: mortalityId } } }
+  ).exec();
 
   if (!result) {
     return res
@@ -92,14 +93,12 @@ const deleteMortality = asyncHandler(async (req, res) => {
       .json({ message: "Error Occured, Invalid Parameters " });
   }
 
-  return res
-    .status(200)
-    .json({ message: `Mortality ${mortalityId} successfully deleted` });
+  return res.status(200).json(result);
 });
 
 const updateMortality = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
-  const batchId = req?.params;
+  const { batchId } = req?.params;
 
   const { mortalityId, numberDead, deathReason } = req?.body;
 
