@@ -43,7 +43,7 @@ app.use("/auth", require("./routes/api/auth"));
 app.use("/refresh", require("./routes/api/refresh"));
 app.use("/logout", require("./routes/api/logout"));
 
-app.use("/employees", verifyJWT, require("./routes/api/employees"));
+app.use("/batches", verifyJWT, require("./routes/api/batches"));
 
 app.all("*", (req, res) => {
   res.status(404);

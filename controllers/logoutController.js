@@ -1,6 +1,7 @@
 const User = require("../model/User");
+const asyncHandler = require("express-async-handler");
 
-const handleLogout = async (req, res) => {
+const handleLogout = asyncHandler(async (req, res) => {
   //on client, also delete the accessToken
 
   const cookies = req.cookies;
@@ -19,7 +20,9 @@ const handleLogout = async (req, res) => {
   }
 
   //Delete the refreshToken in db, by setting the refresh token back to an empty string and saving it back to our database
-  foundUser.refreshToken = "";
+  foundUser.refreshToken = foundUser.refreshToken.filter(
+    (rt) => rt !== refreshToken
+  );
   const result = await foundUser.save();
   console.log("result", result);
   res.clearCookie("jwt", {
@@ -28,6 +31,6 @@ const handleLogout = async (req, res) => {
     secure: true,
   });
   res.sendStatus(204);
-};
+});
 
 module.exports = { handleLogout };

@@ -1,10 +1,30 @@
-20220727	00:30:35	f30c1051-8bf1-4b2b-ad27-959cce6c88bc	Error: Not allowed by CORS
-20220727	00:31:44	6619c9b4-b909-44b0-884f-a0741decac13	Error: Not allowed by CORS
-20220727	00:32:30	6e3a5b70-439c-4abf-a70e-7ab65c8771d0	Error: Not allowed by CORS
-20220727	00:32:55	8f635b7b-5c83-42e7-bb0f-263c1492b796	Error: Not allowed by CORS
-20220727	00:33:27	526dc038-8761-47b6-821c-ad641713120c	Error: Not allowed by CORS
-20220727	00:33:38	c5e53139-e3f2-456e-b6f9-e166cc099056	Error: Not allowed by CORS
-20220728	10:40:36	d496c375-033f-4921-ab02-22574500e6ba	Error: Cannot set headers after they are sent to the client
-20220728	10:40:52	73d850d7-99da-4af3-9f79-1326924002ba	Error: Cannot set headers after they are sent to the client
-20220728	10:40:54	f1a67966-5eb0-4e47-9a13-588fcbf59398	Error: Cannot set headers after they are sent to the client
-20220728	10:41:46	778c835e-386e-4be5-976c-0626e8ef5f16	Error: Cannot set headers after they are sent to the client
+20220903	07:43:28	8eb02bbd-e69e-4af5-9eed-b3440f1f30c4	CastError: Cast to string failed for value "{
+  _id: new ObjectId("6312f6def5998623b69ab94f"),
+  username: 'samuel',
+  password: '$2b$10$ggUEMlSxwdcZS7zkbc57WO1KpmVxXlyE/EegMeLe7mymg1rYXhyTi',
+  refreshToken: [
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhbXVlbCIsImlhdCI6MTY2MjE4NzI2MiwiZXhwIjoxNjYyMjczNjYyfQ.sFooe6KRWswmi3gZNdCl9zHqJko96Po2K7sgfZ1AF4Q'
+  ],
+  __v: 1
+}" (type Object) at path "user" for model "Batch"
+20220903	07:58:47	4a9cce65-b925-4cfc-9a8f-76908393c77c	CastError: Cast to string failed for value "{
+  _id: new ObjectId("6312f6def5998623b69ab94f"),
+  username: 'samuel',
+  password: '$2b$10$ggUEMlSxwdcZS7zkbc57WO1KpmVxXlyE/EegMeLe7mymg1rYXhyTi',
+  refreshToken: [
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhbXVlbCIsImlhdCI6MTY2MjE4ODE3NSwiZXhwIjoxNjYyMjc0NTc1fQ.YS4Xg_hLeEYO3cuJXOAV4TuIDUEjcvkfA9pYWWJaLVw'
+  ],
+  __v: 2
+}" (type Object) at path "user" for model "Batch"
+20220903	09:30:19	1f3c4d5b-2f73-4d7c-bdde-a40fb4e97304	MongoServerError: E11000 duplicate key error collection: FarmDb.batches index: batchNumber_1 dup key: { batchNumber: 1 }
+20220903	09:32:23	4696c14f-c095-4288-aed4-e69cd57c4f29	MongoServerError: E11000 duplicate key error collection: FarmDb.batches index: batchNumber_1 dup key: { batchNumber: 1 }
+20220905	18:24:47	07c01177-42ac-4d92-a1ed-ae748fbd4a93	CastError: Cast to ObjectId failed for value "[object Object]" (type string) at path "_id" for model "Batch"
+20220905	18:27:07	241ea505-98aa-4f16-9284-a3df208304fb	CastError: Cast to ObjectId failed for value "{ batchId: '63162e453fd16bf268136e5d' }" (type Object) at path "_id" for model "Batch"
+20220905	18:27:13	47f1ec35-d428-4e73-ae20-c06c3e6f1a11	CastError: Cast to ObjectId failed for value "{ batchId: '63162e453fd16bf268136e5d' }" (type Object) at path "_id" for model "Batch"
+20220905	18:50:45	81c69c11-c8d9-48bd-859a-59c28be60aac	CastError: Cast to ObjectId failed for value "{ batchId: '63162e453fd16bf268136e5d' }" (type Object) at path "_id" for model "Batch"
+20220905	19:11:41	2c56c2ef-ac21-4cc8-93b8-dedd2f6cee8e	CastError: Cast to ObjectId failed for value "{ batchId: '63162e453fd16bf268136e5d' }" (type Object) at path "_id" for model "Batch"
+20220905	19:13:56	9ddf7782-271a-483f-85c7-173c962c2349	CastError: Cast to ObjectId failed for value "{ batchId: '63162e453fd16bf268136e5d' }" (type Object) at path "_id" for model "Batch"
+20220905	19:15:11	7150821b-c0e7-4e8b-b7df-f5c6bb81eaa2	CastError: Cast to ObjectId failed for value "[object Object]" (type string) at path "_id" for model "Batch"
+20220905	19:15:19	9f56c67a-0021-4659-8077-f7c7861eaf7d	CastError: Cast to ObjectId failed for value "[object Object]" (type string) at path "_id" for model "Batch"
+20220905	19:16:40	0fa8f748-fcbc-4731-8cfc-e7fdeffba1e7	CastError: Cast to ObjectId failed for value "{ batchId: '63162e453fd16bf268136e5d' }" (type Object) at path "_id" for model "Batch"
+20220905	19:44:56	76da4a1b-4ee3-46a0-98c2-8bb67dcfcc1b	CastError: Cast to ObjectId failed for value "{ batchId: '63162e453fd16bf268136e5d' }" (type Object) at path "_id" for model "Batch"
