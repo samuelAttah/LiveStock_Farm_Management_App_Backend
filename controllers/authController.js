@@ -64,7 +64,7 @@ const handleLogin = asyncHandler(async (req, res) => {
     }); // remember to add secure true in production
     return res.json({ accessToken: accessToken });
   } else {
-    return res.status(401).send("Invalid Password");
+    return res.status(401).json({ message: "Invalid Password" });
   }
 });
 

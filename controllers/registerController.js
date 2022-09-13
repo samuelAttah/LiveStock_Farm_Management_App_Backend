@@ -9,7 +9,10 @@ const handleNewUser = async (req, res) => {
       .status(400)
       .json({ message: "Username and Password are required" });
   //check for duplicate usernames in the db
-  const duplicate = await User.findOne({ username: username }).exec(); //here we are looking for a username in our MongoDB that matches the username in the request.body
+  const duplicate = await User.findOne({ username: username })
+    .collation({ locale: "en", strength: 2 })
+    .lean()
+    .exec(); //here we are looking for a username in our MongoDB that matches the username in the request.body. Collation checks if there is a duplicate in upper or lower cases.
   if (duplicate)
     return res.status(409).json({ message: "Username already exists" }); //status code 409 stands for conflict
   try {

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+require("mongoose-type-url");
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
@@ -10,6 +11,8 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  email: { type: String, trim: true },
+  profilePicture: { type: mongoose.SchemaTypes.Url },
   refreshToken: [String],
 });
 
