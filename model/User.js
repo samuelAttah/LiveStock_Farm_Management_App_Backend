@@ -13,7 +13,6 @@ const userSchema = new Schema({
   },
   email: { type: String, trim: true },
   profilePicture: { type: mongoose.SchemaTypes.Url },
-  refreshToken: [String],
 });
 
 module.exports = mongoose.model("User", userSchema);

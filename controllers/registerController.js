@@ -1,13 +1,14 @@
 const User = require("../model/User");
 const bcrypt = require("bcrypt");
+const asyncHandler = require("express-async-handler");
 
 //handler for new user information
-const handleNewUser = async (req, res) => {
-  const { username, password } = req.body;
-  if (!(username && password))
+const handleNewUser = asyncHandler(async (req, res) => {
+  const { username, password, email } = req.body;
+  if (!(username && password && email))
     return res
       .status(400)
-      .json({ message: "Username and Password are required" });
+      .json({ message: "Username, Email and Password are required" });
   //check for duplicate usernames in the db
   const duplicate = await User.findOne({ username: username })
     .collation({ locale: "en", strength: 2 })
@@ -24,12 +25,13 @@ const handleNewUser = async (req, res) => {
     const result = await User.create({
       username: username,
       password: hashedPassword,
+      email: email,
     });
     console.log(result);
     res.status(201).json({ success: `New User ${username} Created!` });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
+});
 
 module.exports = { handleNewUser };
