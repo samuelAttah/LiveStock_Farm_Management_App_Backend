@@ -29,7 +29,7 @@ const handleRefreshToken = asyncHandler(async (req, res) => {
       const accessToken = jwt.sign(
         { username: decoded.username },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "20m" }
+        { expiresIn: "10m" }
       );
 
       //clear previous cookie and set another

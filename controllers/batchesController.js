@@ -21,10 +21,6 @@ const getAllBatches = asyncHandler(async (req, res) => {
     .lean()
     .exec();
 
-  if (batches?.length === 0) {
-    return res.status(200).json({ message: "User has no batches" });
-  }
-
   res.status(200).json(batches);
 });
 
