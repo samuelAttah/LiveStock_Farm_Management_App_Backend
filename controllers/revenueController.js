@@ -30,14 +30,21 @@ const createRevenue = asyncHandler(async (req, res) => {
 
   const { batchId } = req?.params;
 
-  const { itemSold, numberSold, costPerUnit } = req?.body;
+  const { itemSold, numberSold, costPerUnit, dateSold, currency } = req?.body;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
 
   if (!userMatch) {
     return res.status(401).json({ message: "Unauthorized User" });
   }
-  if (!batchId || !itemSold || !numberSold || !costPerUnit) {
+  if (
+    !batchId ||
+    !itemSold ||
+    !numberSold ||
+    !costPerUnit ||
+    !dateSold ||
+    !currency
+  ) {
     return res.status(400).json({ message: "Missing required Parameter" });
   }
 
@@ -49,7 +56,14 @@ const createRevenue = asyncHandler(async (req, res) => {
 
   const totalCost = costPerUnit * numberSold;
 
-  batch.revenue.push({ itemSold, numberSold, costPerUnit, totalCost });
+  batch.revenue.push({
+    itemSold,
+    numberSold,
+    costPerUnit,
+    totalCost,
+    dateSold,
+    currency,
+  });
 
   const result = await batch.save();
 
@@ -100,14 +114,23 @@ const updateRevenue = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
   const { batchId } = req?.params;
 
-  const { revenueId, itemSold, numberSold, costPerUnit } = req?.body;
+  const { revenueId, itemSold, numberSold, costPerUnit, dateSold, currency } =
+    req?.body;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
 
   if (!userMatch) {
     return res.status(401).json({ message: "Unauthorized User" });
   }
-  if (!batchId || !revenueId || !itemSold || !numberSold || !costPerUnit) {
+  if (
+    !batchId ||
+    !revenueId ||
+    !itemSold ||
+    !numberSold ||
+    !costPerUnit ||
+    !dateSold ||
+    !currency
+  ) {
     return res.status(400).json({ message: "Missing required Parameter" });
   }
 
@@ -120,6 +143,8 @@ const updateRevenue = asyncHandler(async (req, res) => {
   batch.revenue.id(revenueId).itemSold = itemSold;
   batch.revenue.id(revenueId).numberSold = numberSold;
   batch.revenue.id(revenueId).costPerUnit = costPerUnit;
+  batch.revenue.id(revenueId).dateSold = dateSold;
+  batch.revenue.id(revenueId).currency = currency;
 
   const result = await batch.save();
 

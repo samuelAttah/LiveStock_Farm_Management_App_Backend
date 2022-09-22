@@ -30,14 +30,20 @@ const createFeed = asyncHandler(async (req, res) => {
 
   const { batchId } = req?.params;
 
-  const { feedName, datePurchased, amountPurchased } = req?.body;
+  const { feedName, datePurchased, amountPurchased, currency } = req?.body;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
 
   if (!userMatch) {
     return res.status(401).json({ message: "Unauthorized User" });
   }
-  if (!batchId || !feedName || !datePurchased || !amountPurchased) {
+  if (
+    !batchId ||
+    !feedName ||
+    !datePurchased ||
+    !amountPurchased ||
+    !currency
+  ) {
     return res.status(400).json({ message: "Missing required Parameter" });
   }
 
@@ -51,6 +57,7 @@ const createFeed = asyncHandler(async (req, res) => {
     feedName: feedName,
     datePurchased: datePurchased,
     amountPurchased: amountPurchased,
+    currency: currency,
   });
 
   const result = await batch.save();
@@ -101,14 +108,22 @@ const updateFeed = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
   const { batchId } = req?.params;
 
-  const { feedId, feedName, datePurchased, amountPurchased } = req?.body;
+  const { feedId, feedName, datePurchased, amountPurchased, currency } =
+    req?.body;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
 
   if (!userMatch) {
     return res.status(401).json({ message: "Unauthorized User" });
   }
-  if (!batchId || !feedId || !feedName || !datePurchased || !amountPurchased) {
+  if (
+    !batchId ||
+    !feedId ||
+    !feedName ||
+    !datePurchased ||
+    !amountPurchased ||
+    !currency
+  ) {
     return res.status(400).json({ message: "Missing required Parameter" });
   }
 
@@ -121,6 +136,7 @@ const updateFeed = asyncHandler(async (req, res) => {
   batch.feed.id(feedId).feedName = feedName;
   batch.feed.id(feedId).datePurchased = datePurchased;
   batch.feed.id(feedId).amountPurchased = amountPurchased;
+  batch.feed.id(feedId).currency = currency;
 
   const result = await batch.save();
 

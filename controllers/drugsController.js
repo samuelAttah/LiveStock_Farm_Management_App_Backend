@@ -30,14 +30,14 @@ const createDrug = asyncHandler(async (req, res) => {
 
   const { batchId } = req?.params;
 
-  const { drugName, purchaseReason, cost } = req?.body;
+  const { drugName, purchaseReason, cost, currency, datePurchased } = req?.body;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
 
   if (!userMatch) {
     return res.status(401).json({ message: "Unauthorized User" });
   }
-  if (!drugName || !purchaseReason || !cost) {
+  if (!drugName || !cost || !currency || !datePurchased) {
     return res.status(400).json({ message: "Missing required Parameter" });
   }
 
@@ -47,7 +47,7 @@ const createDrug = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Invalid Parameters" });
   }
 
-  batch.drugs.push({ drugName, purchaseReason, cost });
+  batch.drugs.push({ drugName, purchaseReason, cost, currency, datePurchased });
 
   const result = await batch.save();
 
@@ -98,14 +98,23 @@ const updateDrug = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
   const { batchId } = req?.params;
 
-  const { drugId, drugName, purchaseReason, cost } = req?.body;
+  const { drugId, drugName, purchaseReason, cost, currency, datePurchased } =
+    req?.body;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
 
   if (!userMatch) {
     return res.status(401).json({ message: "Unauthorized User" });
   }
-  if (!batchId || !drugId || !drugName || !purchaseReason || !cost) {
+  if (
+    !batchId ||
+    !drugId ||
+    !drugName ||
+    !purchaseReason ||
+    !cost ||
+    !currency ||
+    !datePurchased
+  ) {
     return res.status(400).json({ message: "Missing required Parameter" });
   }
 
@@ -118,6 +127,8 @@ const updateDrug = asyncHandler(async (req, res) => {
   batch.drugs.id(drugId).drugName = drugName;
   batch.drugs.id(drugId).purchaseReason = purchaseReason;
   batch.drugs.id(drugId).cost = cost;
+  batch.drugs.id(drugId).currency = currency;
+  batch.drugs.id(drugId).datePurchased = datePurchased;
 
   const result = await batch.save();
 

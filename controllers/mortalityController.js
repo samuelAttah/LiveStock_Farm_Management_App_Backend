@@ -30,14 +30,14 @@ const createMortality = asyncHandler(async (req, res) => {
 
   const { batchId } = req?.params;
 
-  const { numberDead, deathReason } = req?.body;
+  const { numberDead, deathReason, deathDate } = req?.body;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
 
   if (!userMatch) {
     return res.status(401).json({ message: "Unauthorized User" });
   }
-  if (!batchId || !numberDead || !deathReason) {
+  if (!batchId || !numberDead || !deathReason || !deathDate) {
     return res.status(400).json({ message: "Missing required Parameter" });
   }
 
@@ -47,7 +47,7 @@ const createMortality = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Invalid Parameters" });
   }
 
-  batch.drugs.push({ numberDead, deathReason });
+  batch.drugs.push({ numberDead, deathReason, deathDate });
 
   const result = await batch.save();
 
@@ -100,14 +100,14 @@ const updateMortality = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
   const { batchId } = req?.params;
 
-  const { mortalityId, numberDead, deathReason } = req?.body;
+  const { mortalityId, numberDead, deathReason, deathDate } = req?.body;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
 
   if (!userMatch) {
     return res.status(401).json({ message: "Unauthorized User" });
   }
-  if (!batchId || !mortalityId || !numberDead || !deathReason) {
+  if (!batchId || !mortalityId || !numberDead || !deathReason || !deathDate) {
     return res.status(400).json({ message: "Missing required Parameter" });
   }
 
@@ -119,6 +119,7 @@ const updateMortality = asyncHandler(async (req, res) => {
 
   batch.mortality.id(mortalityId).numberDead = numberDead;
   batch.mortality.id(mortalityId).deathReason = deathReason;
+  batch.mortality.id(mortalityId).deathDate = deathDate;
 
   const result = await batch.save();
 
