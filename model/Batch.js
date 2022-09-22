@@ -7,29 +7,41 @@ const feedSchema = new Schema({
   amountPurchased: { type: Schema.Types.Decimal128 },
 });
 
-const housingSchema = new Schema({
-  housingType: { type: String, required: true },
-  cost: { type: Schema.Types.Decimal128, required: true },
-  description: String,
-});
+const housingSchema = new Schema(
+  {
+    housingType: { type: String, required: true },
+    cost: { type: Schema.Types.Decimal128, required: true },
+    description: String,
+  },
+  { timestamps: true }
+);
 
-const drugSchema = new Schema({
-  drugName: { type: String, required: true },
-  purchaseReason: { type: String },
-  cost: { type: Schema.Types.Decimal128, required: true },
-});
+const drugSchema = new Schema(
+  {
+    drugName: { type: String, required: true },
+    purchaseReason: { type: String },
+    cost: { type: Schema.Types.Decimal128, required: true },
+  },
+  { timestamps: true }
+);
 
-const mortalitySchema = new Schema({
-  numberDead: Number,
-  deathReason: String,
-});
+const mortalitySchema = new Schema(
+  {
+    numberDead: Number,
+    deathReason: String,
+  },
+  { timestamps: true }
+);
 
-const revenueSchema = new Schema({
-  itemSold: { type: String, required: true },
-  numberSold: { type: Number, required: true },
-  costPerUnit: { type: Schema.Types.Decimal128, required: true },
-  totalCost: { type: Schema.Types.Decimal128 },
-});
+const revenueSchema = new Schema(
+  {
+    itemSold: { type: String, required: true },
+    numberSold: { type: Number, required: true },
+    costPerUnit: { type: Schema.Types.Decimal128, required: true },
+    totalCost: { type: Schema.Types.Decimal128 },
+  },
+  { timestamps: true }
+);
 
 const batchSchema = new Schema(
   {
