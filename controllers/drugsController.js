@@ -30,14 +30,14 @@ const createDrug = asyncHandler(async (req, res) => {
 
   const { batchId } = req?.params;
 
-  const { drugName, purchaseReason, cost, currency, datePurchased } = req?.body;
+  const { drugName, purchaseReason, cost, datePurchased } = req?.body;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
 
   if (!userMatch) {
     return res.status(401).json({ message: "Unauthorized User" });
   }
-  if (!drugName || !cost || !currency || !datePurchased) {
+  if (!drugName || !cost || !datePurchased) {
     return res.status(400).json({ message: "Missing required Parameter" });
   }
 
@@ -47,7 +47,7 @@ const createDrug = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Invalid Parameters" });
   }
 
-  batch.drugs.push({ drugName, purchaseReason, cost, currency, datePurchased });
+  batch.drugs.push({ drugName, purchaseReason, cost, datePurchased });
 
   const result = await batch.save();
 
@@ -98,8 +98,7 @@ const updateDrug = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
   const { batchId } = req?.params;
 
-  const { drugId, drugName, purchaseReason, cost, currency, datePurchased } =
-    req?.body;
+  const { drugId, drugName, purchaseReason, cost, datePurchased } = req?.body;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
 
@@ -112,7 +111,6 @@ const updateDrug = asyncHandler(async (req, res) => {
     !drugName ||
     !purchaseReason ||
     !cost ||
-    !currency ||
     !datePurchased
   ) {
     return res.status(400).json({ message: "Missing required Parameter" });
@@ -127,7 +125,6 @@ const updateDrug = asyncHandler(async (req, res) => {
   batch.drugs.id(drugId).drugName = drugName;
   batch.drugs.id(drugId).purchaseReason = purchaseReason;
   batch.drugs.id(drugId).cost = cost;
-  batch.drugs.id(drugId).currency = currency;
   batch.drugs.id(drugId).datePurchased = datePurchased;
 
   const result = await batch.save();

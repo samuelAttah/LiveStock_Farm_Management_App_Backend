@@ -30,21 +30,14 @@ const createHousing = asyncHandler(async (req, res) => {
 
   const { batchId } = req?.params;
 
-  const { housingType, cost, description, currency, datePurchased } = req?.body;
+  const { housingType, cost, description, datePurchased } = req?.body;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
 
   if (!userMatch) {
     return res.status(401).json({ message: "Unauthorized User" });
   }
-  if (
-    !batchId ||
-    !housingType ||
-    !cost ||
-    !description ||
-    !currency ||
-    !datePurchased
-  ) {
+  if (!batchId || !housingType || !cost || !description || !datePurchased) {
     return res.status(400).json({ message: "Missing required Parameter" });
   }
 
@@ -54,7 +47,7 @@ const createHousing = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Invalid Parameters" });
   }
 
-  batch.feed.push({ housingType, cost, description, currency, datePurchased });
+  batch.feed.push({ housingType, cost, description, datePurchased });
 
   const result = await batch.save();
   if (!result) {
@@ -104,7 +97,7 @@ const updateHousing = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
   const { batchId } = req?.params;
 
-  const { housingId, housingType, cost, description, currency, datePurchased } =
+  const { housingId, housingType, cost, description, datePurchased } =
     req?.body;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
@@ -125,7 +118,6 @@ const updateHousing = asyncHandler(async (req, res) => {
   batch.housing.id(housingId).housingType = housingType;
   batch.housing.id(housingId).cost = cost;
   batch.housing.id(housingId).description = description;
-  batch.housing.id(housingId).currency = currency;
   batch.housing.id(housingId).datePurchased = datePurchased;
 
   const result = await batch.save();

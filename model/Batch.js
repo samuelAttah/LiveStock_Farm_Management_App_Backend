@@ -6,7 +6,6 @@ const feedSchema = new Schema(
     feedName: String,
     datePurchased: { type: Date, required: true },
     amountPurchased: { type: Schema.Types.Decimal128 },
-    currency: { type: String, required: true },
   },
   { timestamps: true }
 );
@@ -15,7 +14,6 @@ const housingSchema = new Schema(
   {
     housingType: { type: String, required: true },
     cost: { type: Schema.Types.Decimal128, required: true },
-    currency: { type: String, required: true },
     datePurchased: { type: Date, required: true },
     description: String,
   },
@@ -27,7 +25,6 @@ const drugSchema = new Schema(
     drugName: { type: String, required: true },
     purchaseReason: { type: String },
     cost: { type: Schema.Types.Decimal128, required: true },
-    currency: { type: String, required: true },
     datePurchased: { type: Date, required: true },
   },
   { timestamps: true }
@@ -47,7 +44,6 @@ const revenueSchema = new Schema(
     itemSold: { type: String, required: true },
     numberSold: { type: Number, required: true },
     costPerUnit: { type: Schema.Types.Decimal128, required: true },
-    currency: { type: String, required: true },
     totalCost: { type: Schema.Types.Decimal128 },
     dateSold: { type: Date, required: true },
   },

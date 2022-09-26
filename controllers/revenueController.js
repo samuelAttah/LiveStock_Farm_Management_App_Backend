@@ -30,21 +30,14 @@ const createRevenue = asyncHandler(async (req, res) => {
 
   const { batchId } = req?.params;
 
-  const { itemSold, numberSold, costPerUnit, dateSold, currency } = req?.body;
+  const { itemSold, numberSold, costPerUnit, dateSold } = req?.body;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
 
   if (!userMatch) {
     return res.status(401).json({ message: "Unauthorized User" });
   }
-  if (
-    !batchId ||
-    !itemSold ||
-    !numberSold ||
-    !costPerUnit ||
-    !dateSold ||
-    !currency
-  ) {
+  if (!batchId || !itemSold || !numberSold || !costPerUnit || !dateSold) {
     return res.status(400).json({ message: "Missing required Parameter" });
   }
 
@@ -62,7 +55,6 @@ const createRevenue = asyncHandler(async (req, res) => {
     costPerUnit,
     totalCost,
     dateSold,
-    currency,
   });
 
   const result = await batch.save();
@@ -114,8 +106,7 @@ const updateRevenue = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
   const { batchId } = req?.params;
 
-  const { revenueId, itemSold, numberSold, costPerUnit, dateSold, currency } =
-    req?.body;
+  const { revenueId, itemSold, numberSold, costPerUnit, dateSold } = req?.body;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
 
@@ -128,8 +119,7 @@ const updateRevenue = asyncHandler(async (req, res) => {
     !itemSold ||
     !numberSold ||
     !costPerUnit ||
-    !dateSold ||
-    !currency
+    !dateSold
   ) {
     return res.status(400).json({ message: "Missing required Parameter" });
   }
@@ -144,7 +134,6 @@ const updateRevenue = asyncHandler(async (req, res) => {
   batch.revenue.id(revenueId).numberSold = numberSold;
   batch.revenue.id(revenueId).costPerUnit = costPerUnit;
   batch.revenue.id(revenueId).dateSold = dateSold;
-  batch.revenue.id(revenueId).currency = currency;
 
   const result = await batch.save();
 
