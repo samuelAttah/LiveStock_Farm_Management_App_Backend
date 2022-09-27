@@ -47,7 +47,7 @@ const createMortality = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Invalid Parameters" });
   }
 
-  batch.drugs.push({ numberDead, deathReason, deathDate });
+  batch.mortality.push({ numberDead, deathReason, deathDate });
 
   const result = await batch.save();
 

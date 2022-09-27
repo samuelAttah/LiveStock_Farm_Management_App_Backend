@@ -47,7 +47,12 @@ const createHousing = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Invalid Parameters" });
   }
 
-  batch.feed.push({ housingType, cost, description, datePurchased });
+  batch.housing.push({
+    housingType: housingType,
+    cost: cost,
+    description: description,
+    datePurchased: datePurchased,
+  });
 
   const result = await batch.save();
   if (!result) {

@@ -47,7 +47,12 @@ const createDrug = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Invalid Parameters" });
   }
 
-  batch.drugs.push({ drugName, purchaseReason, cost, datePurchased });
+  batch.drugs.push({
+    drugName: drugName,
+    purchaseReason: purchaseReason,
+    cost: cost,
+    datePurchased: datePurchased,
+  });
 
   const result = await batch.save();
 

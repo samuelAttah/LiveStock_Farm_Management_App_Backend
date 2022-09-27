@@ -14,7 +14,7 @@ const housingSchema = new Schema(
   {
     housingType: { type: String, required: true },
     cost: { type: Schema.Types.Decimal128, required: true },
-    datePurchased: { type: Date, required: true },
+    datePurchased: { type: Date },
     description: String,
   },
   { timestamps: true }
@@ -25,7 +25,7 @@ const drugSchema = new Schema(
     drugName: { type: String, required: true },
     purchaseReason: { type: String },
     cost: { type: Schema.Types.Decimal128, required: true },
-    datePurchased: { type: Date, required: true },
+    datePurchased: { type: Date },
   },
   { timestamps: true }
 );
@@ -34,7 +34,7 @@ const mortalitySchema = new Schema(
   {
     numberDead: Number,
     deathReason: String,
-    deathDate: { type: Date, required: true },
+    deathDate: { type: Date },
   },
   { timestamps: true }
 );
@@ -45,7 +45,7 @@ const revenueSchema = new Schema(
     numberSold: { type: Number, required: true },
     costPerUnit: { type: Schema.Types.Decimal128, required: true },
     totalCost: { type: Schema.Types.Decimal128 },
-    dateSold: { type: Date, required: true },
+    dateSold: { type: Date },
   },
   { timestamps: true }
 );
