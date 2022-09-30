@@ -30,8 +30,14 @@ const getAllBatches = asyncHandler(async (req, res) => {
 // @access Private
 const createBatch = asyncHandler(async (req, res) => {
   const requestUser = req.user;
-  const { animalType, numberPurchased, costPerUnit, currency, batchTitle } =
-    req?.body;
+  const {
+    animalType,
+    numberPurchased,
+    costPerUnit,
+    currency,
+    batchTitle,
+    countryCode,
+  } = req?.body;
 
   const foundUser = await User.findOne({ username: requestUser }).lean().exec();
 
@@ -44,7 +50,8 @@ const createBatch = asyncHandler(async (req, res) => {
     !numberPurchased ||
     !costPerUnit ||
     !currency ||
-    !batchTitle
+    !batchTitle ||
+    !countryCode
   ) {
     return res.status(400).json({ message: "Missing Required fields" });
   }
@@ -63,6 +70,7 @@ const createBatch = asyncHandler(async (req, res) => {
     numberPurchased,
     costPerUnit,
     currency,
+    countryCode,
     totalPurchaseCost,
   });
 
@@ -87,6 +95,7 @@ const updateBatch = asyncHandler(async (req, res) => {
     numberPurchased,
     costPerUnit,
     currency,
+    countryCode,
     batchTitle,
     isActive,
   } = req?.body;
@@ -116,8 +125,10 @@ const updateBatch = asyncHandler(async (req, res) => {
     : batch.numberPurchased;
   batch.costPerUnit = costPerUnit ? costPerUnit : batch.costPerUnit;
   batch.currency = currency ? currency : batch.currency;
+  batch.countryCode = countryCode ? countryCode : batch.countryCode;
   batch.batchTitle = batchTitle ? batchTitle : batch.batchTitle;
   batch.isActive = isActive ? isActive : batch.isActive;
+  batch.totalPurchaseCost = costPerUnit * numberPurchased;
 
   const result = await batch.save();
   if (result) {

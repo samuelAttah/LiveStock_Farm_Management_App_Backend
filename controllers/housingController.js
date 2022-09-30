@@ -1,6 +1,7 @@
 const User = require("../model/User");
 const Batch = require("../model/Batch");
 const asyncHandler = require("express-async-handler");
+const mongoose = require("mongoose");
 
 const getAllHousing = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
@@ -64,8 +65,7 @@ const createHousing = asyncHandler(async (req, res) => {
 
 const deleteHousing = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
-  const { batchId } = req?.params;
-  const { housingId } = req?.body;
+  const { batchId, housingId } = req?.params;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
   if (!userMatch) {
@@ -84,9 +84,12 @@ const deleteHousing = asyncHandler(async (req, res) => {
     return res.status(204).json({ message: "No Housing found" });
   }
 
+  //convert housingId from string to ObjectId
+  const convertedHousingId = mongoose.Types.ObjectId(housingId);
+
   const result = await Batch.updateOne(
     { _id: batchId },
-    { $pull: { housing: { _id: housingId } } }
+    { $pull: { housing: { _id: convertedHousingId } } }
   ).exec();
 
   if (!result) {

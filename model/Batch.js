@@ -62,6 +62,7 @@ const batchSchema = new Schema(
     numberPurchased: { type: Number, required: true },
     costPerUnit: { type: Schema.Types.Decimal128, required: true },
     currency: { type: String, required: true },
+    countryCode: { type: String, required: true },
     totalPurchaseCost: Schema.Types.Decimal128,
     feed: [feedSchema],
     housing: [housingSchema],

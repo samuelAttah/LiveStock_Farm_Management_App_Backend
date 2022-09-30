@@ -1,6 +1,7 @@
 const User = require("../model/User");
 const Batch = require("../model/Batch");
 const asyncHandler = require("express-async-handler");
+const mongoose = require("mongoose");
 
 const getAllMortality = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
@@ -62,8 +63,7 @@ const createMortality = asyncHandler(async (req, res) => {
 
 const deleteMortality = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
-  const { batchId } = req?.params;
-  const { mortalityId } = req?.body;
+  const { batchId, mortalityId } = req?.params;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
   if (!userMatch) {
@@ -82,9 +82,12 @@ const deleteMortality = asyncHandler(async (req, res) => {
     return res.status(204).json({ message: "No Mortalities found" });
   }
 
+  //convert mortalityId from string to ObjectId
+  const convertedMortalityId = mongoose.Types.ObjectId(mortalityId);
+
   const result = await Batch.updateOne(
     { _id: batchId },
-    { $pull: { mortality: { _id: mortalityId } } }
+    { $pull: { mortality: { _id: convertedMortalityId } } }
   ).exec();
 
   if (!result) {

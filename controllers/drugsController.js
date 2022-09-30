@@ -1,6 +1,7 @@
 const User = require("../model/User");
 const Batch = require("../model/Batch");
 const asyncHandler = require("express-async-handler");
+const mongoose = require("mongoose");
 
 const getAllDrugs = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
@@ -65,8 +66,7 @@ const createDrug = asyncHandler(async (req, res) => {
 
 const deleteDrug = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
-  const { batchId } = req?.params;
-  const { drugId } = req?.body;
+  const { batchId, drugId } = req?.params;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
   if (!userMatch) {
@@ -85,9 +85,12 @@ const deleteDrug = asyncHandler(async (req, res) => {
     return res.status(204).json({ message: "No Drugs found" });
   }
 
+  //convert drugId from string to ObjectId
+  const convertedDrugId = mongoose.Types.ObjectId(drugId);
+
   const result = Batch.updateOne(
     { _id: batchId },
-    { $pull: { drugs: { _id: drugId } } }
+    { $pull: { drugs: { _id: convertedDrugId } } }
   ).exec();
 
   if (!result) {

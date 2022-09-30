@@ -1,6 +1,7 @@
 const User = require("../model/User");
 const Batch = require("../model/Batch");
 const asyncHandler = require("express-async-handler");
+const mongoose = require("mongoose");
 
 const getAllRevenues = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
@@ -68,17 +69,23 @@ const createRevenue = asyncHandler(async (req, res) => {
 
 const deleteRevenue = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
-  const { batchId } = req?.params;
-  const { revenueId } = req?.body;
+  const { batchId, revenueId } = req?.params;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
   if (!userMatch) {
     return res.status(401).json({ message: "Unauthorized User" });
   }
-  if (!batchId || !revenueId) {
-    return res.status(400).json({ message: "Missing required Parameters" });
+
+  if (!batchId) {
+    return res.status(400).json({ message: "Missing batchId" });
   }
-  const batch = await Batch.findOne({ _id: batchId, user: requestUser }).exec();
+  if (!revenueId) {
+    return res.status(400).json({ message: "Missing revenueId" });
+  }
+  const batch = await Batch.findOne({
+    _id: batchId.toString(),
+    user: requestUser,
+  }).exec();
 
   if (!batch) {
     return res.status(400).json({ message: "Invalid Parameters" });
@@ -88,9 +95,12 @@ const deleteRevenue = asyncHandler(async (req, res) => {
     return res.status(204).json({ message: "No Revenues found" });
   }
 
+  //convert revenueId from string to ObjectId
+  const convertedRevenueId = mongoose.Types.ObjectId(revenueId);
+
   const result = await Batch.updateOne(
     { _id: batchId },
-    { $pull: { revenue: { _id: revenueId } } }
+    { $pull: { revenue: { _id: convertedRevenueId } } }
   ).exec();
 
   if (!result) {
@@ -134,6 +144,7 @@ const updateRevenue = asyncHandler(async (req, res) => {
   batch.revenue.id(revenueId).numberSold = numberSold;
   batch.revenue.id(revenueId).costPerUnit = costPerUnit;
   batch.revenue.id(revenueId).dateSold = dateSold;
+  batch.revenue.id(revenueId).totalCost = costPerUnit * numberSold;
 
   const result = await batch.save();
 

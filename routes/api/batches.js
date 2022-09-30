@@ -22,39 +22,51 @@ router
   .route("/:batchId/drug")
   .get(drugsController.getAllDrugs)
   .put(drugsController.createDrug)
-  .delete(drugsController.deleteDrug)
   .patch(drugsController.updateDrug);
+
+router.route("/:batchId/drug/:drugId").delete(drugsController.deleteDrug);
 
 //FEED ROUTE
 router
   .route("/:batchId/feed")
   .get(feedsController.getAllFeeds)
   .put(feedsController.createFeed)
-  .delete(feedsController.deleteFeed)
   .patch(feedsController.updateFeed);
+
+router.route("/:batchId/feed/:feedId").delete(feedsController.deleteFeed);
 
 //HOUSING ROUTE
 router
   .route("/:batchId/housing")
   .get(housingController.getAllHousing)
   .put(housingController.createHousing)
-  .delete(housingController.deleteHousing)
   .patch(housingController.updateHousing);
+
+router
+  .route("/:batchId/housing/:housingId")
+  .delete(housingController.deleteHousing);
 
 //MORTALITY ROUTE
 router
   .route("/:batchId/mortality")
   .get(mortalityController.getAllMortality)
   .put(mortalityController.createMortality)
-  .delete(mortalityController.deleteMortality)
   .patch(mortalityController.updateMortality);
+
+router
+  .route("/:batchId/mortality/:mortalityId")
+  .delete(mortalityController.deleteMortality);
 
 //REVENUE ROUTE
 router
   .route("/:batchId/revenue")
   .get(revenueController.getAllRevenues)
   .put(revenueController.createRevenue)
-  .delete(revenueController.deleteRevenue)
-  .patch(revenueController.updateRevenue);
+  .patch(revenueController.updateRevenue)
+  .delete(revenueController.deleteRevenue);
+
+router
+  .route("/:batchId/revenue/:revenueId")
+  .delete(revenueController.deleteRevenue);
 
 module.exports = router;

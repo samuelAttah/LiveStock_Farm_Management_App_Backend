@@ -1,6 +1,7 @@
 const User = require("../model/User");
 const Batch = require("../model/Batch");
 const asyncHandler = require("express-async-handler");
+const mongoose = require("mongoose");
 
 const getAllFeeds = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
@@ -63,8 +64,7 @@ const createFeed = asyncHandler(async (req, res) => {
 
 const deleteFeed = asyncHandler(async (req, res) => {
   const requestUser = req?.user;
-  const { batchId } = req?.params;
-  const { feedId } = req?.body;
+  const { batchId, feedId } = req?.params;
 
   const userMatch = await User.findOne({ username: requestUser }).lean().exec();
   if (!userMatch) {
@@ -83,9 +83,12 @@ const deleteFeed = asyncHandler(async (req, res) => {
     return res.status(204).json({ message: "No Feeds found" });
   }
 
+  //convert feedId from string to ObjectId
+  const convertedFeedId = mongoose.Types.ObjectId(feedId);
+
   const result = await Batch.updateOne(
     { _id: batchId },
-    { $pull: { feed: { _id: feedId } } }
+    { $pull: { feed: { _id: convertedFeedId } } }
   ).exec();
 
   if (!result) {
