@@ -56,7 +56,11 @@ const batchSchema = new Schema(
       type: String,
       required: true,
     },
-    batchNumber: Number,
+    batchNumber: {
+      type: Number,
+      index: false,
+      unique: false,
+    },
     batchTitle: { type: String, required: true },
     animalType: { type: String, required: true },
     numberPurchased: { type: Number, required: true },

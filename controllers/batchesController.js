@@ -29,7 +29,7 @@ const getAllBatches = asyncHandler(async (req, res) => {
 // @route POST /batches
 // @access Private
 const createBatch = asyncHandler(async (req, res) => {
-  const requestUser = req.user;
+  const requestUser = req?.user;
   const {
     animalType,
     numberPurchased,
@@ -55,23 +55,23 @@ const createBatch = asyncHandler(async (req, res) => {
   ) {
     return res.status(400).json({ message: "Missing Required fields" });
   }
-  const batches = await Batch.find({ user: foundUser.username }).lean().exec();
+  const batches = await Batch.find({ user: requestUser }).lean().exec();
 
   const batchNumber = batches?.length
     ? batches[batches?.length - 1].batchNumber + 1
-    : 1;
+    : Number(1);
   const totalPurchaseCost = numberPurchased * costPerUnit;
 
   const batch = await Batch.create({
     user: foundUser.username,
-    batchNumber,
-    batchTitle,
-    animalType,
-    numberPurchased,
-    costPerUnit,
-    currency,
-    countryCode,
-    totalPurchaseCost,
+    batchNumber: batchNumber,
+    batchTitle: batchTitle,
+    animalType: animalType,
+    numberPurchased: numberPurchased,
+    costPerUnit: costPerUnit,
+    currency: currency,
+    countryCode: countryCode,
+    totalPurchaseCost: totalPurchaseCost,
   });
 
   if (batch) {
@@ -145,7 +145,7 @@ const updateBatch = asyncHandler(async (req, res) => {
 
 const deleteBatch = asyncHandler(async (req, res) => {
   const requestUser = req.user;
-  const { id } = req?.body;
+  const { id } = req?.params;
   if (!id) {
     res.status(400).json({ message: "Batch Id parameter is Required" });
   }

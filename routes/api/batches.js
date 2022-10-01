@@ -7,15 +7,17 @@ const drugsController = require("../../controllers/drugsController");
 const mortalityController = require("../../controllers/mortalityController");
 const revenueController = require("../../controllers/revenueController");
 
+//BATCH ROUTE
 router
   .route("/")
   .get(batchesController.getAllBatches)
   .post(batchesController.createBatch)
-  .patch(batchesController.updateBatch)
-  .delete(batchesController.deleteBatch);
+  .patch(batchesController.updateBatch);
 
-//used to fetch particular get request to an ID
-router.route("/:id").get(batchesController.getBatch);
+router
+  .route("/:id")
+  .get(batchesController.getBatch)
+  .delete(batchesController.deleteBatch);
 
 //DRUGS ROUTE
 router
