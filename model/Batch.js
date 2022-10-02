@@ -50,6 +50,16 @@ const revenueSchema = new Schema(
   { timestamps: true }
 );
 
+const animalRevenueSchema = new Schema(
+  {
+    numberSold: { type: Number, required: true },
+    costPerUnit: { type: Schema.Types.Decimal128, required: true },
+    totalCost: { type: Schema.Types.Decimal128 },
+    dateSold: { type: Date },
+  },
+  { timestamps: true }
+);
+
 const batchSchema = new Schema(
   {
     user: {
@@ -68,11 +78,13 @@ const batchSchema = new Schema(
     currency: { type: String, required: true },
     countryCode: { type: String, required: true },
     totalPurchaseCost: Schema.Types.Decimal128,
+    datePurchased: { type: Date },
     feed: [feedSchema],
     housing: [housingSchema],
     drugs: [drugSchema],
     mortality: [mortalitySchema],
     revenue: [revenueSchema],
+    animalSales: [animalRevenueSchema],
     isActive: { type: Boolean, default: true },
   },
   { timestamps: true }
