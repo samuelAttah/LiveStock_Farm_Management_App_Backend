@@ -1,6 +1,15 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
+const otherSchema = new Schema(
+  {
+    itemName: String,
+    datePurchased: { type: Date, required: true },
+    amountPurchased: { type: Schema.Types.Decimal128 },
+  },
+  { timestamps: true }
+);
+
 const feedSchema = new Schema(
   {
     feedName: String,
@@ -83,6 +92,7 @@ const batchSchema = new Schema(
     housing: [housingSchema],
     drugs: [drugSchema],
     mortality: [mortalitySchema],
+    otherExpenses: [otherSchema],
     revenue: [revenueSchema],
     animalSales: [animalRevenueSchema],
     isActive: { type: Boolean, default: true },

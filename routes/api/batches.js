@@ -7,6 +7,7 @@ const drugsController = require("../../controllers/drugsController");
 const mortalityController = require("../../controllers/mortalityController");
 const revenueController = require("../../controllers/revenueController");
 const animalSaleController = require("../../controllers/animalSalesController");
+const otherExpensesController = require("../../controllers/otherExpensesController");
 
 //BATCH ROUTE
 router
@@ -81,5 +82,16 @@ router
 router
   .route("/:batchId/revenue/:revenueId")
   .delete(animalSaleController.deleteAnimalSale);
+
+//OTHEREXPENSES ROUTE
+router
+  .route("/:batchId/otherexpenses")
+  .get(otherExpensesController.getAllOtherExpenses)
+  .put(otherExpensesController.createOtherExpense)
+  .patch(otherExpensesController.updateOtherExpense);
+
+router
+  .route("/:batchId/otherexpenses/:expenseId")
+  .delete(otherExpensesController.deleteOtherExpense);
 
 module.exports = router;
