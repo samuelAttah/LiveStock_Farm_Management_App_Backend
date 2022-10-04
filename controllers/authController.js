@@ -44,4 +44,71 @@ const handleLogin = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { handleLogin };
+const handlePasswordVerify = asyncHandler(async (req, res) => {
+  const { oldPassword } = req?.body;
+  const requestUser = req?.user;
+
+  const foundUser = await User.findOne({ username: requestUser }).lean().exec();
+
+  if (!foundUser) {
+    return res.status(401).json({ message: "User not recognized" });
+  }
+
+  if (!oldPassword) {
+    return res.status(400).json({ message: "Missing required Parameters" });
+  }
+
+  //evaluate password using bcrypt
+  const match = await bcrypt.compare(oldPassword, foundUser.password);
+
+  if (!match) {
+    return res.status(400).json({ message: "Password Mismatch" });
+  }
+
+  return res.status(200).json({ message: "Password Match" });
+});
+
+const handlePasswordReset = asyncHandler(async (req, res) => {
+  const { oldPassword, newPassword } = req?.body;
+  const requestUser = req?.user;
+
+  const foundUser = await User.findOne({ username: requestUser }).exec();
+
+  if (!foundUser) {
+    return res.status(401).json({ message: "User not recognized" });
+  }
+
+  if (!oldPassword) {
+    return res.status(400).json({ message: "Missing required Parameters" });
+  }
+
+  //evaluate password using bcrypt
+  const match = await bcrypt.compare(oldPassword, foundUser.password);
+
+  if (!match) {
+    return res.status(400).json({ message: "Password Mismatch" });
+  }
+
+  // CHECK THAT NEW PASSWORD ISNT SAME AS OLD ONE
+  const samePassword = bcrypt.compare(newPassword, foundUser.password);
+
+  if (samePassword) {
+    return res
+      .status(400)
+      .json({ message: "New Password is Same as Old Password!" });
+  }
+
+  //If match and not samePassword, hash new passWord.
+  const newHashedPassword = await bcrypt.hash(newPassword, 10);
+
+  foundUser.password = newHashedPassword;
+  const result = await foundUser.save();
+
+  if (!result) {
+    return res.status(400).json({ message: "Failed to Reset password" });
+  }
+
+  return res.status(200).json({ message: "Password Reset was Successful" });
+});
+
+module.exports = { handleLogin, handlePasswordVerify, handlePasswordReset };
