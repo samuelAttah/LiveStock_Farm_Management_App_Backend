@@ -13,6 +13,13 @@ const userSchema = new Schema({
   },
   email: { type: String, trim: true },
   profilePicture: { type: mongoose.SchemaTypes.Url },
+  firstName: String,
+  lastName: String,
+  gender: String,
+  address: String,
+  farmName: String,
+  birthDay: Date,
+  companyLogo: { type: mongoose.SchemaTypes.Url },
 });
 
 module.exports = mongoose.model("User", userSchema);
