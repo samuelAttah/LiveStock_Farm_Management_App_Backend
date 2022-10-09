@@ -86,11 +86,13 @@ const handlePasswordReset = asyncHandler(async (req, res) => {
   const match = await bcrypt.compare(oldPassword, foundUser.password);
 
   if (!match) {
-    return res.status(400).json({ message: "Password Mismatch" });
+    return res
+      .status(400)
+      .json({ message: "Your Old Passwords do not Mismatch" });
   }
 
   // CHECK THAT NEW PASSWORD ISNT SAME AS OLD ONE
-  const samePassword = bcrypt.compare(newPassword, foundUser.password);
+  const samePassword = await bcrypt.compare(newPassword, foundUser.password);
 
   if (samePassword) {
     return res

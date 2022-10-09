@@ -13,6 +13,8 @@ router.route("/resetpassword").post(authController.handlePasswordReset);
 
 router.route("/profilepicture").put(userController.handleProfilePicture);
 
+router.route("/removeprofilepicture").put(userController.removeProfilePicture);
+
 router.route("/companyLogo").put(userController.handleCompanyLogo);
 
 module.exports = router;
