@@ -1,7 +1,6 @@
 const Batch = require("../model/Batch");
 const User = require("../model/User");
 const asyncHandler = require("express-async-handler");
-const { request } = require("express");
 
 //GET ALL BATCHES
 // @desc Get all User Batches
@@ -139,7 +138,7 @@ const updateBatch = asyncHandler(async (req, res) => {
   if (result) {
     res.status(200).json(result);
   } else {
-    res.status(500);
+    res.status(500).json({ message: "Error Occured while updating Batch" });
   }
 });
 
@@ -200,10 +199,48 @@ const getBatch = asyncHandler(async (req, res) => {
   return res.status(200).json(result);
 });
 
+const endBatch = asyncHandler(async (req, res) => {
+  const requestUser = req.user;
+  const { id } = req?.body;
+
+  const match = await User.findOne({ username: requestUser }).lean().exec();
+
+  if (!match) {
+    return res.status(401).json({ message: "Invalid User" });
+  }
+
+  if (!id) {
+    return res.status(400).json({ message: "Missing Required Parameter; Id" });
+  }
+
+  const batch = await Batch.findOne({
+    _id: id,
+    user: requestUser,
+  }).exec();
+
+  if (!batch) {
+    return res.status(400).json({ message: "Invalid Batch Id or User" });
+  }
+
+  if (!Number(req?.body?.batchNumber) === batch.batchNumber) {
+    res.status(400).json({ message: "batchNumber Can't be Changed" });
+  }
+
+  batch.isActive = false;
+
+  const result = await batch.save();
+  if (result) {
+    res.status(200).json(result);
+  } else {
+    res.status(500).json({ message: "Error Occured while ending Batch" });
+  }
+});
+
 module.exports = {
   getAllBatches,
   createBatch,
   deleteBatch,
   getBatch,
   updateBatch,
+  endBatch,
 };

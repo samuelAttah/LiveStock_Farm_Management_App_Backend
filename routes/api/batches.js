@@ -14,7 +14,8 @@ router
   .route("/")
   .get(batchesController.getAllBatches)
   .post(batchesController.createBatch)
-  .patch(batchesController.updateBatch);
+  .patch(batchesController.updateBatch)
+  .put(batchesController.endBatch);
 
 router
   .route("/:id")
