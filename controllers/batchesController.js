@@ -122,6 +122,30 @@ const updateBatch = asyncHandler(async (req, res) => {
     res.status(400).json({ message: "batchNumber Can't be Changed" });
   }
 
+  const mortalities = batch?.mortality;
+
+  const mortalitiesSum = mortalities?.length
+    ? mortalities.reduce((acc, mortality) => {
+        return acc + Number(mortality.numberDead);
+      }, 0)
+    : 0;
+  const animalSales = batch?.animalSales;
+
+  const animalSalesSum = animalSales?.length
+    ? animalSales.reduce((acc, animalsale) => {
+        return acc + Number(animalsale.numberSold);
+      }, 0)
+    : 0;
+
+  const totalAnimalsLeft = Number(animalSalesSum) + Number(mortalitiesSum);
+
+  if (Number(numberPurchased) < totalAnimalsLeft) {
+    return res.status(400).json({
+      message:
+        "Total number of animals in a batch must be greater or equal to the sum of animals sold and animals dead ",
+    });
+  }
+
   batch.animalType = animalType ? animalType : batch.animalType;
   batch.numberPurchased = numberPurchased
     ? numberPurchased

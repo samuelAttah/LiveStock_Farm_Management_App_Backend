@@ -10,12 +10,20 @@ const handleNewUser = asyncHandler(async (req, res) => {
       .status(400)
       .json({ message: "Username, Email and Password are required" });
   //check for duplicate usernames in the db
-  const duplicate = await User.findOne({ username: username })
+  const usernameDuplicate = await User.findOne({ username: username })
     .collation({ locale: "en", strength: 2 })
     .lean()
-    .exec(); //here we are looking for a username in our MongoDB that matches the username in the request.body. Collation checks if there is a duplicate in upper or lower cases.
-  if (duplicate)
+    .exec(); //here we are looking for a username in our MongoDB that matches the username in the request.body. Collation checks if there is a usernameDuplicate in upper or lower cases.
+  if (usernameDuplicate)
     return res.status(409).json({ message: "Username already exists" }); //status code 409 stands for conflict
+
+  //check for email duplicate
+  const emailDuplicate = await User.findOne({ email: email })
+    .collation({ locale: "en", strength: 2 })
+    .lean()
+    .exec();
+  if (emailDuplicate)
+    return res.status(409).json({ message: "Email already exists" }); //status code 409 stands for conflict
   try {
     //encrypt password using bcrypt
     const hashedPassword = await bcrypt.hash(password, 10);

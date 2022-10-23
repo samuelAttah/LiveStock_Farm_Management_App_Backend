@@ -42,6 +42,7 @@ app.use("/register", require("./routes/api/register"));
 app.use("/auth", require("./routes/api/auth"));
 app.use("/refresh", require("./routes/api/refresh"));
 app.use("/logout", require("./routes/api/logout"));
+app.use("/forgotpassword", require("./routes/api/forgotPassword"));
 
 app.use("/batches", verifyJWT, require("./routes/api/batches"));
 app.use("/user", verifyJWT, require("./routes/api/user"));

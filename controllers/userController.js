@@ -152,6 +152,14 @@ const updateUserDetails = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Missing Required Parameters" });
   }
 
+  const emailDuplicate = await User.findOne({ email: email })
+    .collation({ locale: "en", strength: 2 })
+    .lean()
+    .exec();
+
+  if (emailDuplicate && email !== foundUser.email)
+    return res.status(409).json({ message: "Email already exists" }); //status code 409 stands for conflict
+
   foundUser.homeAddress = homeAddress;
   foundUser.gender = gender;
   foundUser.birthDay = birthday;

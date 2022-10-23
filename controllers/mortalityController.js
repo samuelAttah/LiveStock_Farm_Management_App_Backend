@@ -48,6 +48,31 @@ const createMortality = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Invalid Parameters" });
   }
 
+  const mortalities = batch?.mortality;
+
+  const mortalitiesSum = mortalities?.length
+    ? mortalities.reduce((acc, mortality) => {
+        return acc + Number(mortality.numberDead);
+      }, 0)
+    : 0;
+  const animalSales = batch?.animalSales;
+
+  const animalSalesSum = animalSales?.length
+    ? animalSales.reduce((acc, animalsale) => {
+        return acc + Number(animalsale.numberSold);
+      }, 0)
+    : 0;
+
+  const totalAnimalsLeft =
+    Number(animalSalesSum) + Number(mortalitiesSum) + Number(numberDead);
+
+  if (batch.numberPurchased < totalAnimalsLeft) {
+    return res.status(400).json({
+      message:
+        "Total number of animals in a batch must be greater or equal to the sum of animals sold and animals dead ",
+    });
+  }
+
   batch.mortality.push({ numberDead, deathReason, deathDate });
 
   const result = await batch.save();
@@ -118,6 +143,34 @@ const updateMortality = asyncHandler(async (req, res) => {
 
   if (!batch) {
     return res.status(400).json({ message: "Invalid Parameters" });
+  }
+
+  const mortalities = batch?.mortality;
+
+  const mortalitiesSum = mortalities?.length
+    ? mortalities.reduce((acc, mortality) => {
+        return acc + Number(mortality.numberDead);
+      }, 0)
+    : 0;
+  const animalSales = batch?.animalSales;
+
+  const animalSalesSum = animalSales?.length
+    ? animalSales.reduce((acc, animalsale) => {
+        return acc + Number(animalsale.numberSold);
+      }, 0)
+    : 0;
+
+  const totalAnimalsLeft =
+    Number(animalSalesSum) +
+    Number(mortalitiesSum) +
+    Number(numberDead) -
+    Number(batch.mortality.id(mortalityId).numberDead);
+
+  if (batch.numberPurchased < totalAnimalsLeft) {
+    return res.status(400).json({
+      message:
+        "Total number of animals in a batch must be greater or equal to the sum of animals sold and animals dead ",
+    });
   }
 
   batch.mortality.id(mortalityId).numberDead = numberDead;

@@ -9,7 +9,7 @@ router.route("/updatedetails").put(userController.updateUserDetails);
 
 router.route("/verifypassword").post(authController.handlePasswordVerify);
 
-router.route("/resetpassword").post(authController.handlePasswordReset);
+router.route("/changepassword").post(authController.handlePasswordChange);
 
 router.route("/profilepicture").put(userController.handleProfilePicture);
 
